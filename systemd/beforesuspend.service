@@ -1,0 +1,8 @@
+[Unit]
+Before=suspend.target
+[Service]
+Type=simple
+StandardOutput=syslog
+ExecStart=sh -c "light -s sysfs/backlight/backlight_cool -O; light -s sysfs/backlight/backlight_cool -S 0; light -s sysfs/backlight/backlight_warm -O; light -s sysfs/backlight/backlight_warm -S 0"
+[Install]
+WantedBy=suspend.target

@@ -1,0 +1,3 @@
+SUBSYSTEM=="module", KERNEL=="rockchip_ebc", RUN+="/bin/chgrp video /sys/module/%k/parameters/auto_refresh /sys/module/%k/parameters/bw_threshold /sys/module/%k/parameters/bw_mode /sys/module/%k/parameters/diff_mode /sys/module/%k/parameters/split_area_limit /sys/module/%k/parameters/default_waveform /sys/module/%k/parameters/refresh_threshold", RUN+="/bin/chmod g+w /sys/module/%k/parameters/bw_threshold /sys/module/%k/parameters/bw_mode /sys/module/%k/parameters/default_waveform  /sys/module/%k/parameters/diff_mode /sys/module/%k/parameters/auto_refresh /sys/module/%k/parameters/split_area_limit /sys/module/%k/parameters/refresh_threshold"
+DRIVER=="rockchip-ebc", RUN+="/bin/chgrp video /sys/%p/power/control", RUN+="/bin/chmod g+w /sys/%p/power/control"
+
