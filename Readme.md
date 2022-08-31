@@ -57,3 +57,6 @@ if [[ "$(tty)" = "/dev/tty1" ]]; then
 	sway 2>> ~/.logsway # autostart sway on boot
 fi
 ```
+
+## squeekboard
+copying squeekboard directory to ~/.local/share/ will make squeekboard have someaditional buttons
