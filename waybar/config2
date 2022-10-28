@@ -1,0 +1,167 @@
+
+//
+// Waybar configuration
+//
+// Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+//
+// =============================================================================
+
+{
+    // -------------------------------------------------------------------------
+    // Global configuration
+    // -------------------------------------------------------------------------
+
+    "layer": "top",
+
+    "position": "bottom",
+
+    // If height property would be not present, it'd be calculated dynamically
+    "height": 30,
+
+    "modules-left": [
+      "custom/smenu",
+      "custom/okb",
+      "custom/ws1",
+      "custom/ws2",
+      "custom/ws3",
+      "custom/ws4",
+      "custom/ws5",
+    ],
+    "modules-center": [
+        "sway/workspaces",
+    ],
+    "modules-right": [
+      "custom/refresh",
+      "custom/bw_toggle",
+      "custom/blw_down",
+      "custom/blw_up",
+      "custom/blc_down",
+      "custom/blc_up",
+    ],
+
+
+    // -------------------------------------------------------------------------
+    // Modules
+    // -------------------------------------------------------------------------
+    "sway/mode": {
+        "format": "<span style=\"italic\">  {}</span>", // Icon: expand-arrows-alt
+        "tooltip": false
+    },
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 120
+    },
+
+    "custom/okb": {
+      "format": "",
+      "interval": "once",
+      "on-click": "~/.local/bin/toggle_onscreen_keyboard.py",
+      "min-length": 4,
+      "tooltip": false,
+    },
+
+    "custom/smenu": {
+      "format": "",
+      "interval": "once",
+      "on-click": "ulauncher-toggle",
+      "min-length": 4,
+      "tooltip": false,
+    },
+
+    "custom/ws1": {
+      "format": "1",
+      "interval": "once",
+      "on-click": "swaymsg workspace number 1",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/ws2": {
+      "format": "2",
+      "interval": "once",
+      "on-click": "swaymsg workspace number 2",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/ws3": {
+      "format": "3",
+      "interval": "once",
+      "on-click": "swaymsg workspace number 3",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/ws4": {
+      "format": "4",
+      "interval": "once",
+      "on-click": "swaymsg workspace number 4",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/ws5": {
+      "format": "5",
+      "interval": "once",
+      "on-click": "swaymsg workspace number 5",
+      "min-length": 4,
+      "tooltip": false,
+    },
+
+    "custom/blc_down": {
+      "format": "",
+      "interval": "once",
+      "on-click": "light -s sysfs/backlight/backlight_cool -U 10",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/blc_up": {
+      "format": "",
+      "interval": "once",
+      "on-click": "light -s sysfs/backlight/backlight_cool -A 10",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/blw_down": {
+      "format": "",
+      "interval": "once",
+      "on-click": "light -s sysfs/backlight/backlight_warm -U 10",
+      "min-length": 4,
+      "tooltip": false,
+    },
+    "custom/blw_up": {
+      "format": "",
+      "interval": "once",
+      "on-click": "light -s sysfs/backlight/backlight_warm -A 10",
+      "min-length": 4,
+      "tooltip": false,
+    },
+
+    "custom/bw_toggle": {
+      "exec": "cat /sys/module/rockchip_ebc/parameters/bw_mode",
+	  "format": "{}",
+      "interval": 1,
+      "on-click": "~/.local/bin/toggle_bw.sh",
+      "min-length": 4,
+      "tooltip": false,
+    },
+
+	"custom/refresh": {
+      "format": "",
+      "interval": "once",
+      "on-click": "~/.local/bin/refresh_screen",
+      "min-length": 4,
+      "tooltip": false,
+	},
+
+	"custom/toggle-touch": {
+      "format": "T",
+      "interval": "once",
+      "on-click": "swaymsg input '0:0:cyttsp5' events toggle",
+      "min-length": 4,
+      "tooltip": false,
+	},
+
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    }
+
+}
