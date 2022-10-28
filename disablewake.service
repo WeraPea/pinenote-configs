@@ -1,0 +1,10 @@
+[Unit]
+Description=Disable lid closing/oppening waking up the device
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=sh -c "echo disabled > /sys/bus/platform/devices/gpio-keys/power/wakeup"
+
+[Install]
+WantedBy=multi-user.target
