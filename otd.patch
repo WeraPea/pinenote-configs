@@ -1,0 +1,104 @@
+diff --git a/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json b/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json
+new file mode 100644
+index 00000000..2ac1707d
+--- /dev/null
++++ b/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json
+@@ -0,0 +1,23 @@
++{
++  "Name": "Pine64 Pinenote",
++  "Specifications": {
++    "Digitizer": {
++      "Width": 208,
++      "Height": 157,
++      "MaxX": 20966,
++      "MaxY": 15725
++    },
++    "Pen": {
++      "MaxPressure": 4095,
++      "ButtonCount": 2
++    }
++  },
++  "DigitizerIdentifiers": [
++    {
++      "VendorID": 7531,
++      "ProductID": 260,
++      "InputReportLength": 15,
++      "ReportParser": "OpenTabletDriver.Configurations.Parsers.Pine64.PinenoteReportParser"
++    }
++  ]
++}
+diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs
+new file mode 100644
+index 00000000..695faa9c
+--- /dev/null
++++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs
+@@ -0,0 +1,12 @@
++using OpenTabletDriver.Plugin.Tablet;
++
++namespace OpenTabletDriver.Configurations.Parsers.Pine64
++{
++    public class PinenoteReportParser : IReportParser<IDeviceReport>
++    {
++        public IDeviceReport Parse(byte[] report)
++        {
++            return new PinenoteTabletReport(report);
++        }
++    }
++}
+diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs
+new file mode 100644
+index 00000000..10e83314
+--- /dev/null
++++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs
+@@ -0,0 +1,51 @@
++using System.Numerics;
++using System.Runtime.CompilerServices;
++using OpenTabletDriver.Plugin; // Log
++using OpenTabletDriver.Plugin.Tablet;
++
++namespace OpenTabletDriver.Configurations.Parsers.Pine64
++{
++    public struct PinenoteTabletReport : ITabletReport, IProximityReport, ITiltReport
++    {
++        public PinenoteTabletReport(byte[] report)
++        {
++            Raw = report;
++
++            Position = new Vector2
++            {
++                X = Unsafe.ReadUnaligned<ushort>(ref report[2]),
++                Y = Unsafe.ReadUnaligned<ushort>(ref report[4])
++            };
++
++            // Unit: [-9000..9000]x10^-3 degrees
++            Tilt = new Vector2
++            {
++                X = Unsafe.ReadUnaligned<short>(ref report[9]) * 0.01f,
++                Y = Unsafe.ReadUnaligned<short>(ref report[11]) * 0.01f
++            };
++
++            NearProximity = report[1].IsBitSet(5);
++
++            Pressure = Unsafe.ReadUnaligned<ushort>(ref report[6]);
++            // HoverDistance = report[1].IsBitSet(0) ? 0 : (uint)(byte)(-report[13]); // from (-128..0)
++            HoverDistance = report[1].IsBitSet(0) ? 0 : (uint)report[8];
++
++            PenButtons = new bool[] // TODO
++            {
++                // report[1].IsBitSet(0),
++                false,
++                false
++            };
++        }
++        public byte[] Raw { set; get; }
++        public Vector2 Position { set; get; }
++        public Vector2 Tilt { set; get; }
++        public uint Pressure { set; get; }
++        public bool[] PenButtons { set; get; }
++        public bool NearProximity { set; get; }
++        public uint HoverDistance { set; get; }
++    }
++}
++// # ReportID: 2 / Tip Switch: 0 | Barrel Switch: 0 | Eraser: 0 | Invert: 0 | Secondary Barrel Switch: 0 | In Range: 0 | # | X:  14418 | Y:   8702 | Tip Pressure:      0 | 0xff000004:   89 | X Tilt:   1600 | Y Tilt:   -200 | Z:    -89
++// E: 000473.912333 15 02 00 52 38 fe 21 00 00 59 40 06 38 ff a7 ff
++//                     ?  Ss Y     X     P        XT    YT    Z     ??

@@ -21,7 +21,7 @@ depend = aarch64-linux-gnu-glibc
 depend = fonts-droid-fallback
 depend = fonts-noto-hinted
 ```
-  
+
 install via pacman:
 ```
 sudo pacman -U ./koreader-*.
@@ -39,7 +39,7 @@ ExecStart=-/sbin/agetty -o '-p -f -- \\u' --noclear --autologin alarm - $TERM
 ```
 
 ``` sh
-$ cat .bashrc 
+$ cat .bashrc
 #
 # ~/.bashrc
 #
@@ -59,4 +59,19 @@ fi
 ```
 
 ## squeekboard
-copying squeekboard directory to ~/.local/share/ will make squeekboard have someaditional buttons
+Copying squeekboard directory to ~/.local/share/ will make squeekboard have some additional buttons
+
+## USB tablet
+Running `bin/tablet.sh` converts the PineNote into a usb wacom tablet (requires root).
+
+For better support on the desktop side patch OpenTabletDriver with `otd.patch` (which is intended for [version 0.6.5.1](https://github.com/OpenTabletDriver/OpenTabletDriver/tree/v0.6.5.1) not the master branch) ([nixpkgs overlay](https://github.com/WeraPea/nixos-config/blob/main/overlays/otd.nix)), and configure it.
+
+To initiate the usb connection from desktop side:
+
+```
+$ ssh user@pinenote sudo -S ./pinenote-configs/bin/tablet.sh; ssh user@pinenote touch exit
+```
+
+Pressing Ctrl-C will automatically turn it off and return pinenote to the default state.
+
+TODO: add touch input as well
